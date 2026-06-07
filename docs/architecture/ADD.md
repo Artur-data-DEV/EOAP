@@ -558,7 +558,7 @@ Projeções de volume 1/3/5 anos e gates de capacidade estão na seção **11.10
 
   ```mermaid
   sequenceDiagram
-      participant HRIS as HRIS (SoR Employee)
+      participant HRIS as HRIS (SoR - Sistema de Registro Employee)
       participant SN as ServiceNow / EOAP
       participant LC as Lifecycle Flow
       participant EVT as Event Queue
@@ -957,7 +957,7 @@ Diagrama C4 de componentes dentro do container EOAP Scoped Application. Detalha 
 
   Esta matriz formaliza **quem é dono do dado** e qual papel cada sistema exerce no ecossistema. Em PDI, sistemas externos são simulados por mocks; a matriz permanece válida para evolução corporativa.
 
-  | Dado / Entidade | System of Record (SoR) | System of Engagement (SoE) | System of Action (SoA) | Sincronização |
+  | Dado / Entidade | System of Record (SoR - Sistema de Registro) | System of Engagement (SoE) | System of Action (SoA) | Sincronização |
   | --- | --- | --- | --- | --- |
   | Employee (identidade humana) | HRIS — Workday / SAP HCM | ServiceNow (forms, notificações) | — | Import Set diário + evento `eoap.employee.*` |
   | Identity (conta técnica, grupos AD) | Azure AD / Okta | ServiceNow Catalog | IAM — provisionamento/revogação | Outbound REST + reconciliação diária |
@@ -971,7 +971,7 @@ Diagrama C4 de componentes dentro do container EOAP Scoped Application. Detalha 
   | Vulnerability context | Qualys (futuro) | EOAP Risk views | — | Import Set / API (futuro) |
   | Decision Policies | EOAP Decision Tables (versionadas) | — | — | Update Set + Git backup por sprint |
 
-  **Princípio**: Em caso de divergência entre SoR e SoA (ex: grupo ativo no AD sem registro em `x_eoap_user_access`), o **reconciliation job** trata como drift e o Access Owner decide mitigação conforme runbook EOAP-RUN-002.
+  **Princípio**: Em caso de divergência entre SoR - Sistema de Registro e SoA (ex: grupo ativo no AD sem registro em `x_eoap_user_access`), o **reconciliation job** trata como drift e o Access Owner decide mitigação conforme runbook EOAP-RUN-002.
 
   ### 11.5 Data Classification
 
@@ -1028,7 +1028,7 @@ Diagrama C4 de componentes dentro do container EOAP Scoped Application. Detalha 
 
   ### 11.9 Access Domain — Escopo ADD vs SDD
 
-  O **ciclo de vida de entitlement** (estados, transições, atores e gatilhos de `x_eoap_user_access`) é **design de solução**, não decisão arquitetural. Neste ADD, a decisão arquitetural relevante está em ADR-011 (User Access Registry como entidade governada) e na matriz SoR/SoE/SoA (seção 11.4.1).
+  O **ciclo de vida de entitlement** (estados, transições, atores e gatilhos de `x_eoap_user_access`) é **design de solução**, não decisão arquitetural. Neste ADD, a decisão arquitetural relevante está em ADR-011 (User Access Registry como entidade governada) e na matriz SoR - Sistema de Registro/SoE/SoA (seção 11.4.1).
 
 > **Referência de implementação**: diagrama de estados, tabela de transições, campos e regras de integridade estão no [Solution Design Document — Seção 1.1 e 1.1 Transições de Estado](EOAP_SDD_v2.md#11-x_eoap_user_access--user-access-registry).
 
@@ -1176,7 +1176,7 @@ Análise STRIDE aplicada aos componentes EOAP. Cada categoria mapeia ameaças id
 
   ```mermaid
   flowchart LR
-      subgraph SoR["Systems of Record"]
+      subgraph SoR - Sistema de Registro["Systems of Record"]
           WD[Workday / SAP HCM]
           CMDB3[ServiceNow CMDB]
           EOAP_REG[EOAP Access Registry]
@@ -1199,13 +1199,13 @@ Análise STRIDE aplicada aos componentes EOAP. Cada categoria mapeia ameaças id
       QUALYS -.->|Future API| SN_CHG
   ```
 
-  | Integração | Direção | Padrão | Status PDI | SoR / SoA |
+  | Integração | Direção | Padrão | Status PDI | SoR - Sistema de Registro / SoA |
   | --- | --- | --- | --- | --- |
-  | Workday → Employee | Inbound | Import Set + Transform Map | Mock | Workday = SoR Employee |
-  | EOAP → Azure AD / Okta | Outbound | Outbound REST + Event retry | Mock | EOAP = SoR entitlement; IAM = SoA |
-  | Qualys → Risk context | Inbound | REST / Import Set | Futuro | Qualys = SoR vulnerability |
-  | EOAP → SIEM | Outbound | Syslog / Event streaming | Futuro | EOAP audit = SoR decisões |
-  | HRIS webhook → Lifecycle | Inbound | Scripted REST API | Futuro | HRIS = SoR; EOAP = orquestrador |
+  | Workday → Employee | Inbound | Import Set + Transform Map | Mock | Workday = SoR - Sistema de Registro Employee |
+  | EOAP → Azure AD / Okta | Outbound | Outbound REST + Event retry | Mock | EOAP = SoR - Sistema de Registro entitlement; IAM = SoA |
+  | Qualys → Risk context | Inbound | REST / Import Set | Futuro | Qualys = SoR - Sistema de Registro vulnerability |
+  | EOAP → SIEM | Outbound | Syslog / Event streaming | Futuro | EOAP audit = SoR - Sistema de Registro decisões |
+  | HRIS webhook → Lifecycle | Inbound | Scripted REST API | Futuro | HRIS = SoR - Sistema de Registro; EOAP = orquestrador |
 
   ### 13.1 Princípios de Integração
 
@@ -1950,7 +1950,7 @@ Cada métrica operacional possui threshold, severidade, ação automatizada e ow
   | Correlation ID | Identificador de correlação end-to-end entre evento, log e audit trail. |
   | Idempotency Key | Chave que impede processamento duplicado. |
   | SoD | Segregation of Duties — separação de funções para controle. |
-  | SoR | System of Record — fonte autoritativa do dado. |
+  | SoR - Sistema de Registro | System of Record — fonte autoritativa do dado. |
   | SoE | System of Engagement — interface de interação com usuários. |
   | SoA | System of Action — sistema que executa ação técnica. |
   | DLQ | Dead Letter Queue — fila de eventos/mensagens não processáveis após retries. |
@@ -1999,7 +1999,7 @@ Cada métrica operacional possui threshold, severidade, ação automatizada e ow
   | Data Architecture | Ownership, classification, lifecycle, retention e quality controls. | ✅ Completo |
   | Extensões | Toda extensão com ADR, gap OOB e consequências. | ✅ Completo |
   | Segurança | Roles, ACLs, Field ACLs, SoD, Threat Model STRIDE. | ✅ Completo |
-  | Integração | Padrões REST, Import Sets, Correlation ID, Retry, SoR/SoE/SoA. | ✅ Completo |
+  | Integração | Padrões REST, Import Sets, Correlation ID, Retry, SoR - Sistema de Registro/SoE/SoA. | ✅ Completo |
   | Eventos | Catálogo, contracts, DLQ, idempotência, retry. | ✅ Completo |
   | C4 Model | System Context (L1), Container (L2) e Component (L3). | ✅ Completo |
 | Capacity Planning | Projeção 1/3/5 anos com premissas e gates. | ✅ Completo |
@@ -2020,5 +2020,5 @@ Cada métrica operacional possui threshold, severidade, ação automatizada e ow
   | --- | --- | --- | --- |
   | 1.0 | 2026-06-06 | Artur Campos Batista | Versão inicial unificada (ADD + SDD + Implementation). |
   | 2.0 | 2026-06-06 | Architecture Review Board | Reestruturação: ADD separado de SDD e Implementation Guide. Adição de Logical Architecture, Deployment Architecture, Integration Architecture, Threat Model, Data Classification, CSDM Compliance Assessment, RACI, ADR-017, ADR-018 e ARB Assessment. |
-  | 2.1 | 2026-06-06 | Architecture Review Board | Enterprise Architecture deepening: C4 L1/L2, bounded contexts, sequence diagrams, SoR/SoE/SoA matrix, event contracts, DLQ/retry/idempotency, versioning & release governance, NFRs reforçados, separação ADD/SDD (estado de entitlement → SDD). |
+  | 2.1 | 2026-06-06 | Architecture Review Board | Enterprise Architecture deepening: C4 L1/L2, bounded contexts, sequence diagrams, SoR - Sistema de Registro/SoE/SoA matrix, event contracts, DLQ/retry/idempotency, versioning & release governance, NFRs reforçados, separação ADD/SDD (estado de entitlement → SDD). |
 | 2.2 | 2026-06-06 | Architecture Review Board | Capacity planning (11.10), STRIDE threat model (12.8), alert thresholds & SLOs (15.4), C4 L3 label (7.2). |

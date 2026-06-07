@@ -19,6 +19,29 @@
 ```
 /docs
 ├── README.md (este arquivo)
+├── now_create/
+│   ├── README.md
+│   ├── 01-Initiate/
+│   │   ├── 01-Initiate-Project_Charter-v1.0.md
+│   │   ├── 01-Initiate-Business_Case-v1.0.md
+│   │   └── 01-Initiate-Requirements_Gathering-v1.0.md
+│   ├── 02-Plan/
+│   │   ├── Now_Create_Implementation_Plan.md
+│   │   ├── Now_Create_Backlog.md
+│   │   └── Now_Create_Roadmap.md
+│   ├── 03-Design/
+│   │   ├── Now_Create_ARB_Package.md
+│   │   ├── Now_Create_Adherence_Assessment.md
+│   │   └── Now_Create_Structure_Map.md
+│   ├── 04-Build/
+│   │   └── Now_Create_Build_Guide.md
+│   ├── 05-Validate/
+│   │   └── Now_Create_Test_Strategy.md
+│   ├── 06-Deploy/
+│   │   └── Now_Create_Deployment_Plan.md
+│   ├── 07-Operate/
+│   │   └── Now_Create_Operational_Model.md
+│   └── Now_Create_Gap_Analysis.md
 ├── architecture/
 │   ├── README.md
 │   ├── ARB.md (Architecture Review Board)
@@ -47,13 +70,38 @@
 │   ├── Security_Model.md
 │   ├── Compliance.md
 │   └── Audit_Model.md
-└── archive/
-    └── (documentos históricos e duplicados)
+└── evidence/
+    ├── README.md
+    ├── ATF/
+    ├── Flows/
+    ├── DecisionTables/
+    ├── Dashboards/
+    └── API/
 ```
 
 ---
 
 ## Índice de Documentos
+
+### Now Create (`/docs/now_create`)
+
+| Documento | Descrição | Audiência |
+| --- | --- | --- |
+| [README.md](now_create/README.md) | Now Create Documentation - Índice e estrutura por fase | Todos |
+| [01-Initiate-Project_Charter](now_create/01-Initiate/01-Initiate-Project_Charter-v1.0.md) | Project Charter - Escopo, objetivos, stakeholders, timeline, budget | Executivos, PMs |
+| [01-Initiate-Business_Case](now_create/01-Initiate/01-Initiate-Business_Case-v1.0.md) | Business Case - Problema, solução, benefícios, ROI | Executivos, Financeiro |
+| [01-Initiate-Requirements_Gathering](now_create/01-Initiate/01-Initiate-Requirements_Gathering-v1.0.md) | Requirements Gathering - Funcionais, não-funcionais, compliance | Arquitetos, Desenvolvedores |
+| [Implementation Plan](now_create/02-Plan/Now_Create_Implementation_Plan.md) | Implementation Plan - Plano detalhado por fase (7 fases, 24 semanas) | PMs, Arquitetos |
+| [Backlog](now_create/02-Plan/Now_Create_Backlog.md) | Backlog Executável - 6 Epics, 15 Features, 31 User Stories | PMs, Desenvolvedores |
+| [Roadmap](now_create/02-Plan/Now_Create_Roadmap.md) | Roadmap de Construção - 6 Sprints, 12 semanas | PMs, Desenvolvedores |
+| [ARB Package](now_create/03-Design/Now_Create_ARB_Package.md) | Architecture Review Board Package - ADD, SDD, ADRs, Security | ARB, Arquitetos |
+| [Adherence Assessment](now_create/03-Design/Now_Create_Adherence_Assessment.md) | Now Create Adherence Assessment - Matriz de 86 deliverables | PMs, Arquitetos |
+| [Structure Map](now_create/03-Design/Now_Create_Structure_Map.md) | Now Create Structure Map - Mapa de reorganização por fase | PMs, Arquitetos |
+| [Build Guide](now_create/04-Build/Now_Create_Build_Guide.md) | Build Guide - Guia detalhado por componente (10 componentes) | Desenvolvedores, Administradores |
+| [Test Strategy](now_create/05-Validate/Now_Create_Test_Strategy.md) | Test Strategy - 68 test cases, 6 ATF suites, 43 ATF tests | QA, Desenvolvedores |
+| [Deployment Plan](now_create/06-Deploy/Now_Create_Deployment_Plan.md) | Deployment Plan - Deployment, cutover, rollback, go-live, hypercare | Release Manager, Operations |
+| [Operational Model](now_create/07-Operate/Now_Create_Operational_Model.md) | Operational Model - Support, incident, problem, monitoring, KPIs, SLAs | Operations, SRE |
+| [Gap Analysis](now_create/Now_Create_Gap_Analysis.md) | Gap Analysis - 35 gaps identificados, timeline de 22 semanas | PMs, Arquitetos |
 
 ### Architecture (`/docs/architecture`)
 
@@ -63,6 +111,7 @@
 | [ADD.md](architecture/ADD.md) | Architecture Design Document - Decisões arquiteturais, NFRs, arquitetura lógica | Arquitetos, Desenvolvedores |
 | [SDD.md](architecture/SDD.md) | Solution Design Document - Design detalhado de componentes | Desenvolvedores, Implementadores |
 | [ARB_REVIEW.md](architecture/ARB_REVIEW.md) | Enterprise Architectural Review - Revisão completa 8 dimensões | ARB, Arquitetos Enterprise |
+| [NFRs.md](architecture/NFRs.md) | Non-Functional Requirements - Performance, availability, scalability, security | Arquitetos, SRE |
 | [ADRs/](architecture/ADRs/) | Architectural Decision Records - 20 ADRs aprovados | Arquitetos, Desenvolvedores |
 
 ### Implementation (`/docs/implementation`)
@@ -70,7 +119,7 @@
 | Documento | Descrição | Audiência |
 | --- | --- | --- |
 | [Implementation_Guide.md](implementation/Implementation_Guide.md) | Guia de implementação completo - 10 passos detalhados | Implementadores, PMs |
-| [Installation_Guide.md](implementation/Installation_Guide.md) | Guia de instalação - Application scope, tabelas, roles, ACLs | Administradores ServiceNow |
+| [Installation_Guide.md](implementation/Installation_Guide.md) | Guia de instalação - Application scope, tabelas, roles, ACLs (com scripts de validation/rollback) | Administradores ServiceNow |
 | [Configuration_Guide.md](implementation/Configuration_Guide.md) | Guia de configuração - Decision Tables, Flows, Integrações | Implementadores, Administradores |
 
 ### Operations (`/docs/operations`)
@@ -95,6 +144,17 @@
 | [Security_Model.md](governance/Security_Model.md) | Modelo de segurança - RBAC, ACL, SoD, STRIDE | Security, Compliance |
 | [Compliance.md](governance/Compliance.md) | Modelo de compliance - SOX, ISO 27001, LGPD | Compliance, Legal |
 | [Audit_Model.md](governance/Audit_Model.md) | Modelo de auditoria - Audit trail, logging, procedimentos | Auditores, Compliance |
+
+### Evidence (`/docs/evidence`)
+
+| Documento | Descrição | Audiência |
+| --- | --- | --- |
+| [README.md](evidence/README.md) | Evidence Pack - Índice de evidências de implementação | ARB, Stakeholders |
+| [ATF/](evidence/ATF/) | ATF Results - Resultados de testes automatizados | QA, ARB |
+| [Flows/](evidence/Flows/) | Flow Documentation - Documentação de flows | Desenvolvedores, ARB |
+| [DecisionTables/](evidence/DecisionTables/) | Decision Table Documentation - Documentação de DTs | Desenvolvedores, ARB |
+| [Dashboards/](evidence/Dashboards/) | Dashboard Documentation - Documentação de dashboards | Operations, ARB |
+| [API/](evidence/API/) | API Specification - Especificação completa da API REST | Integradores, Desenvolvedores |
 
 ---
 
@@ -171,14 +231,32 @@
 
 ## SLOs Operacionais
 
-| SLO | Target |
-| --- | --- |
-| Offboarding revogação | < 60s |
-| Change risk calculation | < 5s |
-| Event processing | < 30s |
-| Form load time | < 3s |
-| CMDB quality | ≥ 95% |
-| Event processing success | ≥ 99% |
+| SLO | Target | Medição | Alert Threshold |
+| --- | --- | --- | --- |
+| Offboarding revogação | < 60s | 95th percentile | > 90s |
+| Change risk calculation | < 5s | 95th percentile | > 7s |
+| Event processing | < 30s | 95th percentile | > 45s |
+| Form load time | < 3s | 95th percentile | > 4s |
+| CMDB quality | ≥ 95% | Daily average | < 90% |
+| Event processing success | ≥ 99% | Daily average | < 95% |
+| Availability (EOAP Application) | 99.5% uptime | Monthly | < 99% |
+| Availability (API REST) | 99.5% uptime | Monthly | < 99% |
+
+---
+
+## NFRs Completos
+
+| Categoria | Target | Documento |
+| --- | --- | --- |
+| Performance | Offboarding < 60s, Risk < 5s, Events < 30s | [NFRs.md](architecture/NFRs.md) |
+| Availability | 99.5% uptime application, 99% uptime integrações | [NFRs.md](architecture/NFRs.md) |
+| Scalability | Ano 1: 10K user_access, Ano 3: 50K, Ano 5: 150K | [NFRs.md](architecture/NFRs.md) |
+| Security | Failed auth < 10/hour, ACL violations = 0, MFA 100% (admin, risk_analyst) | [NFRs.md](architecture/NFRs.md) |
+| Compliance | SOX 100%, ISO 27001 100%, LGPD 100% | [NFRs.md](architecture/NFRs.md) |
+| Reliability | Offboarding success ≥ 99%, Event processing success ≥ 99% | [NFRs.md](architecture/NFRs.md) |
+| Usability | Form completion < 2 min, Error rate < 5%, CSAT ≥ 4.0/5.0 | [NFRs.md](architecture/NFRs.md) |
+| Maintainability | Code coverage ≥ 80%, ATF pass rate 100% | [NFRs.md](architecture/NFRs.md) |
+| Interoperability | IAM 99%, HRIS 99%, SIEM 99% | [NFRs.md](architecture/NFRs.md) |
 
 ---
 

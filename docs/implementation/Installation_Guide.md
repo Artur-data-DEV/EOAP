@@ -75,14 +75,61 @@
 - ACLs cross-scope base configuradas
 
 **Validation**:
-- Verificar em System Applications que x_eoap está ativa
-- Navegar para menu EOAP e verificar submenus
-- Testar cross-scope access para tabelas globais
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar application existe e está ativa
+var app = new GlideRecord('sys_app');
+app.addQuery('scope', 'x_eoap');
+if (app.next()) {
+  gs.info('Application x_eoap found: ' + app.name + ', Active: ' + app.active);
+} else {
+  gs.error('Application x_eoap not found');
+}
+
+// 2. Verificar menu existe
+var menu = new GlideRecord('sys_app_module');
+menu.addQuery('application', app.sys_id);
+menu.addQuery('name', 'EOAP');
+if (menu.next()) {
+  gs.info('Menu EOAP found');
+} else {
+  gs.error('Menu EOAP not found');
+}
+
+// 3. Verificar submenus
+menu.addQuery('application', app.sys_id);
+menu.query();
+var submenuCount = menu.getRowCount();
+gs.info('Submenus count: ' + submenuCount);
+if (submenuCount === 6) {
+  gs.info('All 6 submenus present');
+} else {
+  gs.error('Expected 6 submenus, found ' + submenuCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Application x_eoap found: EOAP - Enterprise Operations Automation Platform, Active: true
+Menu EOAP found
+Submenus count: 6
+All 6 submenus present
+```
 
 **Rollback**:
-- Deactivate application x_eoap
-- Remover menu EOAP
-- Remover ACLs cross-scope
+1. Deactivate application x_eoap
+2. Remover menu EOAP
+3. Remover ACLs cross-scope
+4. Verificar cleanup via script:
+```javascript
+var app = new GlideRecord('sys_app');
+app.addQuery('scope', 'x_eoap');
+if (app.next()) {
+  app.active = false;
+  app.update();
+  gs.info('Application x_eoap deactivated');
+}
+```
 
 ---
 
@@ -140,15 +187,86 @@
 - Field ACLs configuradas
 
 **Validation**:
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_user_access');
+if (table.next()) {
+  gs.info('Table x_eoap_user_access found');
+} else {
+  gs.error('Table x_eoap_user_access not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_user_access');
+dict.addQuery('element_name', 'IN', 'user,application,status,valid_from,valid_to');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 5) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 5 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar índices
+var index = new GlideRecord('sys_index');
+index.addQuery('table', table.sys_id);
+index.query();
+var indexCount = index.getRowCount();
+gs.info('Indexes count: ' + indexCount);
+if (indexCount === 6) {
+  gs.info('All 6 indexes present');
+} else {
+  gs.error('Expected 6 indexes, found ' + indexCount);
+}
+
+// 4. Verificar ACL deny-by-default
+var acl = new GlideRecord('sys_security_acl');
+acl.addQuery('name', 'x_eoap_user_access');
+acl.addQuery('operation', 'create');
+acl.query();
+var aclCount = acl.getRowCount();
+gs.info('Create ACLs count: ' + aclCount);
+if (aclCount === 2) { // x_eoap_admin, x_eoap_access_owner
+  gs.info('Create ACLs configured correctly');
+} else {
+  gs.error('Expected 2 create ACLs, found ' + aclCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_user_access found
+Critical fields count: 5
+All critical fields present
+Indexes count: 6
+All 6 indexes present
+Create ACLs count: 2
+Create ACLs configured correctly
+```
+
+**Manual Validation**:
 - Criar registro via script (system context) → sucesso
-- Tentar criar via UI (user context) → bloqueado
+- Tentar criar via UI (user context sem role) → bloqueado
 - Tentar deletar → bloqueado
 - Verificar índices em Table Dictionary
 
 **Rollback**:
-- Remover tabela x_eoap_user_access
-- Remover índices
-- Remover ACLs
+1. Remover tabela x_eoap_user_access
+2. Remover índices
+3. Remover ACLs
+4. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_user_access');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_user_access deleted');
+}
+```
 
 #### 2.2 x_eoap_access_exception
 
@@ -181,10 +299,63 @@
 - ACLs configuradas
 
 **Validation**:
-- Mesmo padrão de validação que x_eoap_user_access
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_access_exception');
+if (table.next()) {
+  gs.info('Table x_eoap_access_exception found');
+} else {
+  gs.error('Table x_eoap_access_exception not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_access_exception');
+dict.addQuery('element_name', 'IN', 'user_access,exception_type,valid_from,valid_to');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 4) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 4 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar índices
+var index = new GlideRecord('sys_index');
+index.addQuery('table', table.sys_id);
+index.query();
+var indexCount = index.getRowCount();
+gs.info('Indexes count: ' + indexCount);
+if (indexCount === 3) {
+  gs.info('All 3 indexes present');
+} else {
+  gs.error('Expected 3 indexes, found ' + indexCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_access_exception found
+Critical fields count: 4
+All critical fields present
+Indexes count: 3
+All 3 indexes present
+```
 
 **Rollback**:
-- Remover tabela e índices
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_access_exception');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_access_exception deleted');
+}
+```
 
 #### 2.3 x_eoap_audit_trail
 
@@ -223,12 +394,82 @@
 - ACLs write-only configuradas
 
 **Validation**:
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_audit_trail');
+if (table.next()) {
+  gs.info('Table x_eoap_audit_trail found');
+} else {
+  gs.error('Table x_eoap_audit_trail not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_audit_trail');
+dict.addQuery('element_name', 'IN', 'event_type,entity_type,action,actor,correlation_id');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 5) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 5 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar ACL write-only
+var acl = new GlideRecord('sys_security_acl');
+acl.addQuery('name', 'x_eoap_audit_trail');
+acl.addQuery('operation', 'write');
+acl.query();
+var aclCount = acl.getRowCount();
+gs.info('Write ACLs count: ' + aclCount);
+if (aclCount === 0) {
+  gs.info('Write ACLs correctly blocked (append-only)');
+} else {
+  gs.error('Expected 0 write ACLs, found ' + aclCount);
+}
+
+// 4. Verificar ACL delete blocked
+acl.addQuery('operation', 'delete');
+acl.query();
+var deleteAclCount = acl.getRowCount();
+gs.info('Delete ACLs count: ' + deleteAclCount);
+if (deleteAclCount === 0) {
+  gs.info('Delete ACLs correctly blocked (immutable)');
+} else {
+  gs.error('Expected 0 delete ACLs, found ' + deleteAclCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_audit_trail found
+Critical fields count: 5
+All critical fields present
+Write ACLs count: 0
+Write ACLs correctly blocked (append-only)
+Delete ACLs count: 0
+Delete ACLs correctly blocked (immutable)
+```
+
+**Manual Validation**:
 - Tentar update/delete → bloqueado
 - Criar via EOAP_AuditLogger → sucesso
 - Criar via UI → bloqueado
 
 **Rollback**:
-- Remover tabela e índices
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_audit_trail');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_audit_trail deleted');
+}
+```
 
 #### 2.4 x_eoap_event_processing
 
@@ -263,11 +504,73 @@
 - Idempotency garantida por índice unique
 
 **Validation**:
-- Tentar criar evento duplicado → ignored_duplicate
-- Verificar índice unique
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_event_processing');
+if (table.next()) {
+  gs.info('Table x_eoap_event_processing found');
+} else {
+  gs.error('Table x_eoap_event_processing not found');
+}
+
+// 2. Verificar índice unique em idempotency_key
+var index = new GlideRecord('sys_index');
+index.addQuery('table', table.sys_id);
+index.addQuery('unique', true);
+index.query();
+var uniqueIndexCount = index.getRowCount();
+gs.info('Unique indexes count: ' + uniqueIndexCount);
+if (uniqueIndexCount === 1) {
+  gs.info('Unique index on idempotency_key present');
+} else {
+  gs.error('Expected 1 unique index, found ' + uniqueIndexCount);
+}
+
+// 3. Testar idempotency
+var event = new GlideRecord('x_eoap_event_processing');
+event.idempotency_key = 'test_key_123';
+event.event_type = 'test_event';
+event.event_data = '{}';
+event.status = 'received';
+event.insert();
+gs.info('First event inserted');
+
+// Tentar inserir duplicado
+var event2 = new GlideRecord('x_eoap_event_processing');
+event2.idempotency_key = 'test_key_123';
+event2.event_type = 'test_event';
+event2.event_data = '{}';
+event2.status = 'received';
+try {
+  event2.insert();
+  gs.error('Duplicate event inserted - idempotency not working');
+} catch (e) {
+  gs.info('Duplicate event blocked - idempotency working');
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_event_processing found
+Unique indexes count: 1
+Unique index on idempotency_key present
+First event inserted
+Duplicate event blocked - idempotency working
+```
 
 **Rollback**:
-- Remover tabela e índices
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_event_processing');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_event_processing deleted');
+}
+```
 
 #### 2.5 x_eoap_risk_evidence
 
@@ -302,11 +605,64 @@
 - ACLs configuradas
 
 **Validation**:
-- Criar via EOAP_RiskEngine → sucesso
-- Tentar criar via UI → bloqueado
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_risk_evidence');
+if (table.next()) {
+  gs.info('Table x_eoap_risk_evidence found');
+} else {
+  gs.error('Table x_eoap_risk_evidence not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_risk_evidence');
+dict.addQuery('element_name', 'IN', 'change_request,risk_factor,band,calculated_on');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 4) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 4 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar ACL write-only via RiskEngine
+var acl = new GlideRecord('sys_security_acl');
+acl.addQuery('name', 'x_eoap_risk_evidence');
+acl.addQuery('operation', 'write');
+acl.query();
+var aclCount = acl.getRowCount();
+gs.info('Write ACLs count: ' + aclCount);
+if (aclCount === 1) { // EOAP_RiskEngine only
+  gs.info('Write ACL configured for RiskEngine only');
+} else {
+  gs.error('Expected 1 write ACL (RiskEngine), found ' + aclCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_risk_evidence found
+Critical fields count: 4
+All critical fields present
+Write ACLs count: 1
+Write ACL configured for RiskEngine only
+```
 
 **Rollback**:
-- Remover tabela e índices
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_risk_evidence');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_risk_evidence deleted');
+}
+```
 
 #### 2.6 x_eoap_staging_employee
 
@@ -333,11 +689,63 @@
 - Tabela staging para HRIS criada
 
 **Validation**:
-- Ingest via Import Set → sucesso
-- Verificar índices
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_staging_employee');
+if (table.next()) {
+  gs.info('Table x_eoap_staging_employee found');
+} else {
+  gs.error('Table x_eoap_staging_employee not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_staging_employee');
+dict.addQuery('element_name', 'IN', 'employee_sys_id,event_type,processed');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 3) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 3 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar índices
+var index = new GlideRecord('sys_index');
+index.addQuery('table', table.sys_id);
+index.query();
+var indexCount = index.getRowCount();
+gs.info('Indexes count: ' + indexCount);
+if (indexCount === 3) {
+  gs.info('All 3 indexes present');
+} else {
+  gs.error('Expected 3 indexes, found ' + indexCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_staging_employee found
+Critical fields count: 3
+All critical fields present
+Indexes count: 3
+All 3 indexes present
+```
 
 **Rollback**:
-- Remover tabela
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_staging_employee');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_staging_employee deleted');
+}
+```
 
 #### 2.7 x_eoap_staging_access_reconciliation
 
@@ -366,11 +774,63 @@
 - Tabela staging para reconciliação criada
 
 **Validation**:
-- Job de reconciliação popula tabela → sucesso
-- Verificar índices
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar tabela existe
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_staging_access_reconciliation');
+if (table.next()) {
+  gs.info('Table x_eoap_staging_access_reconciliation found');
+} else {
+  gs.error('Table x_eoap_staging_access_reconciliation not found');
+}
+
+// 2. Verificar campos críticos
+var dict = new GlideRecord('sys_dictionary');
+dict.addQuery('name', 'x_eoap_staging_access_reconciliation');
+dict.addQuery('element_name', 'IN', 'user_sys_id,application_sys_id,drift_type,reconciliation_status');
+dict.query();
+var fieldCount = dict.getRowCount();
+gs.info('Critical fields count: ' + fieldCount);
+if (fieldCount === 4) {
+  gs.info('All critical fields present');
+} else {
+  gs.error('Expected 4 critical fields, found ' + fieldCount);
+}
+
+// 3. Verificar índices
+var index = new GlideRecord('sys_index');
+index.addQuery('table', table.sys_id);
+index.query();
+var indexCount = index.getRowCount();
+gs.info('Indexes count: ' + indexCount);
+if (indexCount === 3) {
+  gs.info('All 3 indexes present');
+} else {
+  gs.error('Expected 3 indexes, found ' + indexCount);
+}
+```
+
+**Expected Validation Output**:
+```
+Table x_eoap_staging_access_reconciliation found
+Critical fields count: 4
+All critical fields present
+Indexes count: 3
+All 3 indexes present
+```
 
 **Rollback**:
-- Remover tabela
+1. Remover tabela e índices
+2. Verificar cleanup via script:
+```javascript
+var table = new GlideRecord('sys_db_object');
+table.addQuery('name', 'x_eoap_staging_access_reconciliation');
+if (table.next()) {
+  table.deleteRecord();
+  gs.info('Table x_eoap_staging_access_reconciliation deleted');
+}
+```
 
 ---
 
@@ -412,14 +872,87 @@
 - Usuários de teste criados com roles apropriados
 
 **Validation**:
+```javascript
+// Validation via Script (Background Scripts)
+// 1. Verificar roles existem
+var roles = ['x_eoap_admin', 'x_eoap_cmdb_manager', 'x_eoap_access_owner', 'x_eoap_change_manager', 'x_eoap_risk_analyst', 'x_eoap_auditor', 'x_eoap_manager'];
+var role = new GlideRecord('sys_user_role');
+for (var i = 0; i < roles.length; i++) {
+  role.addQuery('name', roles[i]);
+  if (role.next()) {
+    gs.info('Role ' + roles[i] + ' found');
+  } else {
+    gs.error('Role ' + roles[i] + ' not found');
+  }
+}
+
+// 2. Verificar grupos existem
+var groups = ['EOAP Access Owners', 'EOAP CAB Risk Reviewers', 'EOAP Platform Owners'];
+var group = new GlideRecord('sys_user_group');
+for (var i = 0; i < groups.length; i++) {
+  group.addQuery('name', groups[i]);
+  if (group.next()) {
+    gs.info('Group ' + groups[i] + ' found');
+  } else {
+    gs.error('Group ' + groups[i] + ' not found');
+  }
+}
+
+// 3. Verificar usuários de teste existem
+var testUsers = ['eoap_admin_user', 'eoap_cmdb_manager_user', 'eoap_access_owner_user', 'eoap_change_manager_user', 'eoap_risk_analyst_user', 'eoap_auditor_user', 'eoap_manager_user'];
+var user = new GlideRecord('sys_user');
+for (var i = 0; i < testUsers.length; i++) {
+  user.addQuery('user_name', testUsers[i]);
+  if (user.next()) {
+    gs.info('Test user ' + testUsers[i] + ' found');
+  } else {
+    gs.error('Test user ' + testUsers[i] + ' not found');
+  }
+}
+```
+
+**Expected Validation Output**:
+```
+Role x_eoap_admin found
+Role x_eoap_cmdb_manager found
+Role x_eoap_access_owner found
+Role x_eoap_change_manager found
+Role x_eoap_risk_analyst found
+Role x_eoap_auditor found
+Role x_eoap_manager found
+Group EOAP Access Owners found
+Group EOAP CAB Risk Reviewers found
+Group EOAP Platform Owners found
+Test user eoap_admin_user found
+Test user eoap_cmdb_manager_user found
+Test user eoap_access_owner_user found
+Test user eoap_change_manager_user found
+Test user eoap_risk_analyst_user found
+Test user eoap_auditor_user found
+Test user eoap_manager_user found
+```
+
+**Manual Validation**:
 - Verificar roles em User Administration → Roles
 - Verificar contains em cada role
 - Login como cada usuário de teste e verificar acesso
 
 **Rollback**:
-- Remover roles
-- Remover grupos
-- Remover usuários de teste
+1. Remover roles
+2. Remover grupos
+3. Remover usuários de teste
+4. Verificar cleanup via script:
+```javascript
+var roles = ['x_eoap_admin', 'x_eoap_cmdb_manager', 'x_eoap_access_owner', 'x_eoap_change_manager', 'x_eoap_risk_analyst', 'x_eoap_auditor', 'x_eoap_manager'];
+var role = new GlideRecord('sys_user_role');
+for (var i = 0; i < roles.length; i++) {
+  role.addQuery('name', roles[i]);
+  if (role.next()) {
+    role.deleteRecord();
+    gs.info('Role ' + roles[i] + ' deleted');
+  }
+}
+```
 
 ---
 

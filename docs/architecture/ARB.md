@@ -128,7 +128,7 @@ Política vive em Decision Tables. Orquestração vive em Flows. Código procedu
 
 ### B.5 System of Record / Engagement / Action
 
-| Entidade | SoR | SoE | SoA |
+| Entidade | SoR - Sistema de Registro | SoE | SoA |
 | --- | --- | --- | --- |
 | Employee | HRIS | ServiceNow | — |
 | Identity técnica | Azure AD / Okta | Catalog | IAM |
