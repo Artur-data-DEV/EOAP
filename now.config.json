@@ -1,0 +1,7 @@
+{
+  "instance": "SEU_PDI.service-now.com",
+  "username": "admin",
+  "password": "",
+  "scope": "x_eoap",
+  "fluentDir": "src/fluent"
+}
