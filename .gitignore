@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+src/fluent/generated/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment / secrets (never commit)
+.env
+.env.local
+*.pem
+now-sdk-auth.json
+
+# Temporary
+tmp/
+temp/
+*.tmp

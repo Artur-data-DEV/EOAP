@@ -1,0 +1,33 @@
+{
+  "name": "eoap",
+  "version": "0.1.0",
+  "description": "EOAP - Enterprise Operations Automation Platform | Official ServiceNow Scoped App Template (x_eoap) with Agentic Orchestration",
+  "private": true,
+  "scripts": {
+    "build": "now-sdk build",
+    "deploy": "now-sdk install",
+    "deploy:reinstall": "now-sdk install --reinstall",
+    "auth": "now-sdk auth",
+    "auth:list": "now-sdk auth --list",
+    "clean": "now-sdk clean",
+    "lint": "echo 'Add ESLint/Fluent specific lint when available'",
+    "template:validate": "node -e \"console.log('Run structure validation - see .github/workflows/build-fluent.yml')\"",
+    "agents:help": "cat prompts/README.md && echo '\nSee agents/README.md for definitions.'"
+  },
+  "devDependencies": {
+    "@servicenow/sdk": "^4.7.2",
+    "typescript": "^5.5.0"
+  },
+  "keywords": [
+    "servicenow",
+    "fluent-sdk",
+    "eoap",
+    "access-governance",
+    "offboarding",
+    "audit-trail",
+    "template",
+    "agentic",
+    "multi-agent"
+  ],
+  "license": "UNLICENSED"
+}
