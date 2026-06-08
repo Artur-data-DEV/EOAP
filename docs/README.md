@@ -1,76 +1,44 @@
-# EOAP — Enterprise Operations Automation Platform (Template Oficial)
+# EOAP - Documentação
 
-| Atributo              | Valor                                      |
-|-----------------------|--------------------------------------------|
-| **Status**            | EXECUTION PHASE + Agentic Foundation       |
-| **Current Sprint**    | 0 (Setup) → 1 (Foundation)                 |
-| **Current Goal**      | Estrutura de template + base agentic       |
-| **Next Milestone**    | Sprint 1 Concluído + build/deploy limpo    |
-| **Tipo**              | Template Oficial da organização            |
+**Enterprise Operations Automation Platform**
 
-## O que é o EOAP
+Template oficial para projetos ServiceNow Scoped Apps com foco em automação de operações, governança de acessos e orquestração agentic.
 
-EOAP é uma **aplicação escopada** (`x_eoap`) para automação completa do ciclo de vida de acessos (Onboarding, Move, Offboarding), com CMDB como backbone, audit trail imutável e governança forte.
+**Single Source of Truth**: Git + Fluent SDK (`.now.ts`)
 
-Este repositório é o **Template Oficial** para todos os novos projetos ServiceNow Scoped Apps da organização.
+---
 
-## Estrutura Obrigatória do Repositório (Template)
+## Navegação Rápida
 
-- `now.config.json` + `package.json`
-- `src/fluent/` (core, access, governance, integrations, automation)
-- `src/server/`
-- `src/metadata/`
-- `docs/` (now_create, architecture/ADRs, developer, implementation, 02-Product-Management, 03-Execution, etc.)
-- `prompts/` (system prompts para agentes)
-- `agents/` (definições de Supervisor + agentes especializados)
-- `templates/`
-- `.github/workflows/`
+| Área | Descrição | Link |
+|------|-----------|------|
+| **Now Create** | Metodologia completa (Strategy → Plan → Execution → Build → Deploy) | [now_create/README.md](./now_create/README.md) |
+| **Arquitetura** | ADRs, diagramas, padrões e decisões técnicas | [architecture/README.md](./architecture/README.md) |
+| **Developer Guide** | Configuração, Fluent SDK, Git workflow e padrões de código | [developer/README.md](./developer/README.md) |
+| **Implementação** | Guias práticos, MVP e passo a passo | [implementation/README.md](./implementation/README.md) |
+| **Governança** | Compliance, controles, audit e políticas | [governance/README.md](./governance/README.md) |
+| **Testes** | Estratégia de testes e qualidade | [testing/README.md](./testing/README.md) |
+| **Operações** | Runbooks, manutenção e suporte | [operations/README.md](./operations/README.md) |
+| **Evidências** | Resultados para ARB, auditorias e stakeholders | [evidence/README.md](./evidence/README.md) |
 
-## Visão Agentic
+---
 
-O desenvolvimento e manutenção seguem um modelo multi-agente:
+## Princípios da Documentação
 
-- **Supervisor Agent** orquestra tudo
-- **Code Agent**, **Doc Agent**, **Validator Agent**, **VTB Agent**, **KB Agent**, **Report Agent**
+- **Clara e navegável**: Estrutura hierárquica com índices em cada seção.
+- **Alinhada ao Now Create**: As pastas `now_create/` seguem as fases oficiais.
+- **Código como fonte primária**: A documentação descreve e referencia o que está implementado em `src/fluent/`.
+- **Agentic ready**: Prompts e agentes em `prompts/` e `agents/` são parte da documentação viva.
+- **Versionada no Git**: Toda alteração de docs deve acompanhar o código quando aplicável.
 
-A partir de um prompt simples do usuário, o sistema planeja, executa código Fluent, atualiza documentação, sincroniza VTB/KB e gera relatórios — tudo com rastreabilidade total no Git.
+---
 
-## Fluxo Documental
+## Status do Projeto
 
-```
-01-Architecture (ADRs)
-    ↓
-02-Product-Management (Backlog → Stories)
-    ↓
-03-Execution (Sprint Planning → Step-by-Step → Artifacts)
-    ↓
-04-Quality (Testing)
-    ↓
-05-Evidence (Resultados)
+- **Fase atual**: Foundation + início da orquestração agentic
+- **Template**: Oficial da organização para novos Scoped Apps
+- **Escopo**: `x_eoap`
 
-+ prompts/ e agents/ (orquestração)
-+ docs/developer + docs/now_create (template)
-```
+Para começar a desenvolver, consulte **[Developer Guide → Setup](./developer/setup.md)**.
 
-## Princípios Máximos (inflexíveis)
-
-1. **Git é a única fonte da verdade**
-2. **Implementation (Fluent SDK) is the Source of Truth**
-3. **Deny-by-Default**
-4. **OOB First**
-5. **Nomenclatura rigorosa** (`x_eoap_*` / `EOAP_*`)
-6. **Híbrido controlado** — manual só quando necessário, sempre documentado e com plano de retorno ao Git
-
-## Como começar
-
-Leia:
-- `docs/developer/getting-started.md`
-- `docs/developer/agentic-development.md`
-- `prompts/supervisor-system.md`
-- `agents/README.md`
-
-Para desenvolvimento agentic, forneça o prompt do Supervisor para um LLM forte e delegue as tarefas.
-
-## Fonte Única da Verdade para Implementação
-
-`docs/03-Execution/Step-by-Step/EOAP-MVP-Implementation-Guide.md` (atualize conforme o código evolui).
+Para entender as decisões arquiteturais, consulte **[Architecture → ADRs](./architecture/ADRs/)**.

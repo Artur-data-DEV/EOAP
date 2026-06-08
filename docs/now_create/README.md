@@ -1,27 +1,31 @@
-# Now Create — Alinhamento do Template EOAP
+# Now Create — Metodologia EOAP
 
-Este diretório documenta como o EOAP Template se alinha e acelera a metodologia **Now Create** da ServiceNow.
+Esta seção alinha o projeto EOAP à metodologia oficial **Now Create** da ServiceNow.
 
-## Princípios de integração
+## Fases
 
-- **Planning** → Product Backlog + Stories em `docs/02-Product-Management/`
-- **Architecture** → ADRs em `docs/01-Architecture/ADRs/` + decisões registradas pelo Supervisor Agent
-- **Development** → Fluent SDK em `src/fluent/` + módulos em `src/server/` (Git como fonte)
-- **Testing** → `docs/04-Quality/`
-- **Deployment** → `npm run deploy` + evidências em `docs/05-Evidence/`
-- **Governance & Documentation** → mantidos vivos pelo sistema agentic (Doc Agent + Validator Agent)
+| Fase | Descrição | Conteúdo |
+|------|-----------|----------|
+| **01-Strategy** | Definição de visão, objetivos, stakeholders e valor | `01-Strategy/` |
+| **02-Plan** | Backlog, stories, roadmap, estimativas | `02-Plan/` |
+| **03-Execution** | Desenvolvimento, testes, integração | `03-Execution/` |
+| **04-Build** | Empacotamento, validação, preparação para deploy | `04-Build/` |
+| **05-Deploy** | Implantação, ativação, treinamento, hipercare | `05-Deploy/` |
 
-## Vantagens do uso deste template com Now Create
+## Como o EOAP usa Now Create
 
-- Estrutura de pastas padronizada reduz tempo de setup de novos projetos.
-- Prompts e agentes especializados garantem que todas as fases do Now Create produzam artefatos consistentes e rastreáveis.
-- O Supervisor Agent pode ser usado para gerar os artefatos de cada fase a partir de prompts de alto nível.
+- **Git + Fluent SDK** substitui grande parte do trabalho manual de "Build" e "Deploy".
+- O sistema agentic (Supervisor + Agents) acelera a geração de artefatos de todas as fases.
+- A documentação é mantida viva e sincronizada com o código.
 
-## Recomendação
+## Integração com o Template
 
-Para novos projetos:
-1. Use este repositório como base.
-2. Execute o fluxo agentic para popular backlog, ADRs iniciais e estrutura de código a partir do escopo do projeto.
-3. Mantenha o VTB sincronizado (via VTB Agent ou manual com link para stories).
+Todo novo projeto baseado neste template deve iniciar preenchendo as fases em `now_create/`.
 
-Consulte o Implementation Guide para o MVP atual e os ADRs para as decisões arquiteturais de longo prazo.
+O Supervisor Agent pode ser instruído a gerar o conteúdo inicial de cada fase a partir de um prompt de alto nível do usuário.
+
+## Links úteis
+
+- Developer Guide (para a fase de Execution/Build)
+- Architecture (decisões que impactam Strategy e Plan)
+- Evidence (resultados para fase de Deploy e governança)
