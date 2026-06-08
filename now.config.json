@@ -1,7 +1,7 @@
 {
+  "instance": "SEU_PDI.service-now.com",
+  "username": "admin",
+  "password": "",
   "scope": "x_eoap",
-  "scopeId": "TO_BE_POPULATED_AFTER_APP_CREATION",
-  "name": "EOAP - Enterprise Operations Automation Platform",
-  "tsconfigPath": "./src/server/tsconfig.json"
+  "fluentDir": "src/fluent"
 }
-
