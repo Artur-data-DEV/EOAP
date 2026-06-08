@@ -1,20 +1,17 @@
-# Implementação
+# Implementation
 
-Guias práticos de implementação do EOAP.
+This is the practical "how to build" section.
 
-## Arquivos principais
+## Main Documents
 
-- [mvp-guide.md](./mvp-guide.md) — Guia completo do MVP (Fonte Única da Verdade para implementação)
-- step-by-step/ — Guias detalhados passo a passo por sprint ou componente
+- **mvp-guide.md** — The Single Source of Truth for the current MVP implementation. It maps every component to its code location in `src/fluent/` and tells you the exact order of work.
+- **step-by-step/** — Detailed guides when needed (currently minimal; most detail lives in the artifact specs).
 
-## Como usar
+## How to use
 
-O guia `mvp-guide.md` é o documento de referência para o que deve ser implementado e em que ordem.
+1. Read `mvp-guide.md` to understand scope and status.
+2. Go to the detailed specs in `now_create/03-Execution/artifacts/` for what each component must do.
+3. Implement in `src/fluent/` following `developer/fluent-guide.md` and `developer/standards.md`.
+4. Use the Agentic System (`npm run agent:orchestrate`) to help generate code and keep docs in sync.
 
-Todo código em `src/fluent/` deve ter referência clara ao artefato ou seção correspondente neste diretório.
-
-## Status
-
-A implementação segue uma abordagem **Fluent SDK first** com elementos híbridos controlados quando o SDK ainda não cobre 100% do artefato (ex: Dashboards complexos, alguns Catalog Items).
-
-Para o status atual dos componentes, consulte a tabela no início do `mvp-guide.md`.
+The goal of this template is that the documentation in `now_create/` + `implementation/` + code in `src/fluent/` are always consistent.

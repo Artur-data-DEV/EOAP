@@ -1,44 +1,38 @@
-# EOAP - Documentação
+# EOAP Documentation
 
-**Enterprise Operations Automation Platform**
+**Enterprise Operations Automation Platform**  
+Official Template for ServiceNow Scoped Applications with Agentic Orchestration
 
-Template oficial para projetos ServiceNow Scoped Apps com foco em automação de operações, governança de acessos e orquestração agentic.
+**Single Source of Truth**: This repository (Git + `src/fluent/` code)
 
-**Single Source of Truth**: Git + Fluent SDK (`.now.ts`)
+## Navigation
 
----
+### Core Methodology
+- [Now Create](./now_create/README.md) — Full project lifecycle (Strategy → Deploy)
+  - 01-Strategy
+  - 02-Plan (Backlog + Stories)
+  - 03-Execution (Artifacts + Sprint Planning)
+  - 04-Build
+  - 05-Deploy
 
-## Navegação Rápida
+### Technical
+- [Architecture](./architecture/README.md) — ADRs, standards, diagrams
+- [Developer Guide](./developer/README.md) — Setup, Fluent SDK, Git workflow, standards
+- [Implementation](./implementation/README.md) — MVP guide and step-by-step
 
-| Área | Descrição | Link |
-|------|-----------|------|
-| **Now Create** | Metodologia completa (Strategy → Plan → Execution → Build → Deploy) | [now_create/README.md](./now_create/README.md) |
-| **Arquitetura** | ADRs, diagramas, padrões e decisões técnicas | [architecture/README.md](./architecture/README.md) |
-| **Developer Guide** | Configuração, Fluent SDK, Git workflow e padrões de código | [developer/README.md](./developer/README.md) |
-| **Implementação** | Guias práticos, MVP e passo a passo | [implementation/README.md](./implementation/README.md) |
-| **Governança** | Compliance, controles, audit e políticas | [governance/README.md](./governance/README.md) |
-| **Testes** | Estratégia de testes e qualidade | [testing/README.md](./testing/README.md) |
-| **Operações** | Runbooks, manutenção e suporte | [operations/README.md](./operations/README.md) |
-| **Evidências** | Resultados para ARB, auditorias e stakeholders | [evidence/README.md](./evidence/README.md) |
+### Supporting Areas
+- [Agentic System](./agentic/README.md) — Multi-agent orchestration (the unique part of this template)
+- [Governance](./governance/README.md)
+- [Testing](./testing/README.md)
+- [Operations](./operations/README.md)
+- [Evidence](./evidence/README.md)
 
----
+## Quick Links for Common Tasks
 
-## Princípios da Documentação
+- **I want to develop**: Start with `developer/setup.md` and `developer/fluent-guide.md`
+- **I want to understand the architecture**: `architecture/ADRs/`
+- **I want the implementation specs**: `now_create/03-Execution/artifacts/`
+- **I want to use the agents**: `agentic/README.md` + `npm run agent:orchestrate`
+- **I want the backlog/stories**: `now_create/02-Plan/`
 
-- **Clara e navegável**: Estrutura hierárquica com índices em cada seção.
-- **Alinhada ao Now Create**: As pastas `now_create/` seguem as fases oficiais.
-- **Código como fonte primária**: A documentação descreve e referencia o que está implementado em `src/fluent/`.
-- **Agentic ready**: Prompts e agentes em `prompts/` e `agents/` são parte da documentação viva.
-- **Versionada no Git**: Toda alteração de docs deve acompanhar o código quando aplicável.
-
----
-
-## Status do Projeto
-
-- **Fase atual**: Foundation + início da orquestração agentic
-- **Template**: Oficial da organização para novos Scoped Apps
-- **Escopo**: `x_eoap`
-
-Para começar a desenvolver, consulte **[Developer Guide → Setup](./developer/setup.md)**.
-
-Para entender as decisões arquiteturais, consulte **[Architecture → ADRs](./architecture/ADRs/)**.
+This structure is intentionally clean and Now Create aligned. Legacy scattered folders have been consolidated.
