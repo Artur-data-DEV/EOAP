@@ -1,7 +1,7 @@
 {
   "name": "eoap",
-  "version": "0.1.0",
-  "description": "EOAP - Enterprise Operations Automation Platform | Official ServiceNow Scoped App Template (x_eoap) with Agentic Orchestration",
+  "version": "0.2.0",
+  "description": "EOAP - Enterprise Operations Automation Platform | Official ServiceNow Scoped App Template with full Agentic Orchestration (Flows, Decision Tables, Virtual Agent, KB, VTB, multi-agent system)",
   "private": true,
   "scripts": {
     "build": "now-sdk build",
@@ -10,12 +10,13 @@
     "auth": "now-sdk auth",
     "auth:list": "now-sdk auth --list",
     "clean": "now-sdk clean",
-    "lint": "echo 'Add ESLint/Fluent specific lint when available'",
-    "template:validate": "node -e \"console.log('Run structure validation - see .github/workflows/build-fluent.yml')\"",
-    "agents:help": "cat prompts/README.md && echo '\nSee agents/README.md for definitions.'"
+    "agent:orchestrate": "npx ts-node agents/orchestrator.ts",
+    "vtb:setup": "npx ts-node agents/vtb-setup.ts",
+    "template:validate": "echo 'Structure validation - see .github/workflows'"
   },
   "devDependencies": {
     "@servicenow/sdk": "^4.7.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.0"
   },
   "keywords": [
@@ -27,7 +28,10 @@
     "audit-trail",
     "template",
     "agentic",
-    "multi-agent"
+    "multi-agent",
+    "virtual-agent",
+    "decision-table",
+    "vtb"
   ],
   "license": "UNLICENSED"
 }
